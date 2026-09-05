@@ -13,7 +13,7 @@ export default function Hero(){
                 Your browser does not support the video tag.
             </video>
 
-            <div className="absolute inset-0 bg-black/40 backdrop-blur-[50px]"/>
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-[10px]"/>
             <div className="relative z-10 text-center px-4">
                 <a
                     href="https://youtu.be/6yFQGA3gYy4"
@@ -21,7 +21,7 @@ export default function Hero(){
                     rel="noopener noreferrer"
                     className="group inline-block cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95">
                     <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-wider text-white uppercase drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
-                        STREAM TEMPER TODAY
+                        STREAM TEMPER TODAY!
                     </h1>
                 </a>
             </div>

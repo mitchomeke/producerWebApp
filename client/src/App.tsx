@@ -2,6 +2,7 @@ import Header from "./components/Header";
 import Hero from "./components/Hero.tsx";
 import BeatsSection from "./components/BeatsSection.tsx";
 import SongSection from "./components/SongSection.tsx";
+import ContactInfo from "./components/ContactInfo.tsx";
 export function App() {
 
   return (
@@ -12,6 +13,7 @@ export function App() {
               <BeatsSection/>
               <SongSection/>
           </main>
+              <ContactInfo/>
           </div>
   );
 }

@@ -1,11 +1,12 @@
 export default function SongSection (){
     const tiers = [5,4,3,2,1];
     return (
-        <section className="relative overflow-hidden py-16 px-4">
 
+        <section className="relative overflow-hidden py-16 px-4">
+            <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-black/100 to-transparent opacity-70" />
             <div className="relative z-10 mb-10 text-center">
                 <h2 className="text-2xl font-extrabold uppercase tracking-tight text-black sm:text-3xl">
-                    Song Section
+                    Song Selection
                 </h2>
                 <p className="mt-2 text-sm text-zinc-400">
                     Browse songs categorized by tier
