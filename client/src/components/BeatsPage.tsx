@@ -18,7 +18,7 @@ export default function BeatsPage (){
     const starCount = tier ? tier.split('-')[0] : '';
 
     useEffect(() => {
-        fetch('http://localhost:5000/beats?tier=${starCount}')
+        fetch(`http://localhost:5000/beats?tier=${starCount}`)
             .then((res) => res.json())
             .then((data) => {
                 setBeats(data);

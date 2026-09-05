@@ -11,8 +11,9 @@ const BEATS_CATALOG = [
         title: 'Santoryu',
         bpm: 140,
         tier: 5,
+        genre: 'rap',
         price: 35,
-        audioUrl: 'https://pub-your-r2-subdomain.r2.dev/beats/santoryu-preview.mp3',
+        audioUrl: `https://pub-246a11c0233344ad97feacb33e658f49.r2.dev/untitled.509.wav`,
     }
 ];
 
