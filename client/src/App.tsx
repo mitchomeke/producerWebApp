@@ -5,6 +5,8 @@ import SongSection from "./components/SongSection.tsx";
 import ContactInfo from "./components/ContactInfo.tsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import BeatsPage from "./components/BeatsPage.tsx";
+import SongsPage from "./components/SongsPage.tsx";
+
 
 function HomePage(){
     return (
@@ -25,6 +27,7 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<HomePage/>} />
                 <Route path="/beats/:tier" element={<BeatsPage/>} />
+                <Route path="/songs/:tier" element={<SongsPage/>} />
             </Routes>
         </BrowserRouter>
     );

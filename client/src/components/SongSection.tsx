@@ -3,7 +3,7 @@ export default function SongSection (){
     const tiers = [5,4,3,2,1];
     const navigate = useNavigate();
     const openSongPage = (star: number) => {
-        navigate(`/songs/${star}-star/`)
+        navigate(`/songs/${star}-star`)
     }
     return (
 
