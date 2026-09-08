@@ -20,20 +20,22 @@ export default function BeatsPage (){
     const [selectedBpm, setSelectedBpm] = useState('all');
     const [selectedPrice, setSelectedPrice] = useState('all');
     const [selectedGenre, setSelectedGenre] = useState('all');
+    const [search, setSearch] = useState('');
 
     const starCount = tier ? tier.split('-')[0] : '';
 
     useEffect(() => {
-        fetch(`http://localhost:5000/beats?tier=${starCount}&selectedBpm=${selectedBpm}&selectedPrice=${selectedPrice}&selectedGenre=${selectedGenre}`)
+        fetch(`http://localhost:5000/beats?tier=${starCount}&selectedBpm=${selectedBpm}&selectedPrice=${selectedPrice}&selectedGenre=${selectedGenre}&search=${search}`)
             .then((res) => res.json())
             .then((data) => {
                 setBeats(data);
                 setLoading(false);
             })
-    }, [starCount,selectedBpm,selectedPrice,selectedGenre]);
+    }, [starCount,selectedBpm,selectedPrice,selectedGenre,search]);
+
 
     function openBeatsPaymentPage(id: number) {
-        navigate(`/beats/payment?=${id}`);
+        navigate(`/beats/payment?id=${id}`);
     }
 
     return (
@@ -47,7 +49,7 @@ export default function BeatsPage (){
                     playsInline
                     className="h-full w-full object-cover"
                 >
-                    <source src="/videos/zoro-bg.mp4" type="video/mp4" />
+                    <source src="/videos/yeat.mp4" type="video/mp4" />
                 </video>
 
                 {/* Semi-transparent dark wash (adjust black/50 to black/70 depending on video brightness) */}
@@ -93,8 +95,8 @@ export default function BeatsPage (){
                             className="w-full appearance-none rounded-xl border border-zinc-700/60 bg-black/70 backdrop-blur-md px-4 py-2.5 pr-9 text-xs sm:text-sm font-medium text-white transition-colors hover:border-zinc-500 focus:border-white focus:outline-none cursor-pointer"
                         >
                             <option value="all">All BPMs</option>
-                            <option value="80-90">100–110 BPM</option>
-                            <option value="90-100">100–110 BPM</option>
+                            <option value="80-90">80–90 BPM</option>
+                            <option value="90-100">90–100 BPM</option>
                             <option value="100-110">100–110 BPM</option>
                             <option value="110-120">110–120 BPM</option>
                             <option value="120-130">120–130 BPM</option>
@@ -134,12 +136,37 @@ export default function BeatsPage (){
                                 setSelectedGenre('all');
                                 setSelectedBpm('all');
                                 setSelectedPrice('all');
+                                setSearch('');
                             }}
                             className="text-xs font-semibold text-zinc-300 hover:text-white transition-colors px-2 py-1"
                         >
                             Reset Filters
                         </button>
                     )}
+                    <div className="relative w-full sm:w-56">
+                        <input
+                            type="text"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder="Search by title..."
+                            className="w-full rounded-xl border border-zinc-700/60 bg-black/70 backdrop-blur-md px-4 py-2.5 pr-9 text-xs sm:text-sm font-medium text-white placeholder-zinc-500 transition-colors hover:border-zinc-500 focus:border-white focus:outline-none"
+                        />
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-zinc-400">
+                            <svg
+                                className="h-4 w-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"
+                                />
+                            </svg>
+                        </div>
+                    </div>
                 </div>
 
                 {loading ? (

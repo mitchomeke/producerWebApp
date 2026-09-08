@@ -6,6 +6,8 @@ import ContactInfo from "./components/ContactInfo.tsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import BeatsPage from "./components/BeatsPage.tsx";
 import SongsPage from "./components/SongsPage.tsx";
+import BeatsPaymentPage from "./components/BeatsPaymentPage.tsx";
+import SongsPaymentPage from "./components/SongPaymentPage.tsx";
 
 
 function HomePage(){
@@ -22,12 +24,15 @@ function HomePage(){
     )
 }
 export default function App() {
+    // @ts-ignore
     return (
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<HomePage/>} />
                 <Route path="/beats/:tier" element={<BeatsPage/>} />
                 <Route path="/songs/:tier" element={<SongsPage/>} />
+                <Route path="/beats/:tier/payment" element={<BeatsPaymentPage/>} />
+                <Route path="/songs/:tier/payment" element={<SongsPaymentPage/>} />
             </Routes>
         </BrowserRouter>
     );
