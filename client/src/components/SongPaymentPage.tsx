@@ -52,7 +52,7 @@ export default function SongPaymentPage () {
         }
         setIsProcessing(true);
         try {
-            const res = await fetch('/api/create-checkout-session', {
+            const res = await fetch('/api/create-checkout-session/songs', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -134,7 +134,7 @@ export default function SongPaymentPage () {
                         <h2 className="text-xs font-semibold text-zinc-300 uppercase tracking-wider">License Includes:</h2>
                         <ul className="space-y-2.5 text-xs text-zinc-300">
                             <li className="flex items-center gap-2">
-                                <span className="text-emerald-400 font-bold">✓</span> Untagged 24-bit WAV & 320kbps MP3
+                                <span className="text-emerald-400 font-bold">✓</span>24-bit WAV & 320kbps MP3
                             </li>
                             <li className="flex items-center gap-2">
                                 <span className="text-emerald-400 font-bold">✓</span> Commercial distribution on Spotify & Apple

@@ -214,7 +214,7 @@ export default function SongsPage(){
                                         controls
                                         controlsList="nodownload"
                                         onContextMenu={(e) => e.preventDefault()}
-                                        src={song.audioUrl}
+                                        src={`http://localhost:5000/api/songs/preview/${song.id}`}
                                         onPlay={(e) => {
                                             document.querySelectorAll('audio').forEach((audio) => {
                                                 if (audio != e.currentTarget){

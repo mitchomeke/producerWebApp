@@ -199,7 +199,7 @@ export default function BeatsPage (){
                                        controlsList="nodownload"
                                        onContextMenu={(e) => e.preventDefault()}
                                        preload="none"
-                                       src={beat.audioUrl}
+                                       src={`http://localhost:5000/api/beats/preview/${beat.id}`}
                                        onPlay={(e) => {
                                            document.querySelectorAll('audio').forEach((audio)=>
                                           {

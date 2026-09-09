@@ -8,6 +8,8 @@ import BeatsPage from "./components/BeatsPage.tsx";
 import SongsPage from "./components/SongsPage.tsx";
 import BeatsPaymentPage from "./components/BeatsPaymentPage.tsx";
 import SongsPaymentPage from "./components/SongPaymentPage.tsx";
+import BeatsPaymentSuccess from "./components/BeatsPaymentSuccess.tsx";
+import SongsPaymentSuccess from "./components/SongsPaymentSuccess.tsx";
 
 
 function HomePage(){
@@ -31,8 +33,10 @@ export default function App() {
                 <Route path="/" element={<HomePage/>} />
                 <Route path="/beats/:tier" element={<BeatsPage/>} />
                 <Route path="/songs/:tier" element={<SongsPage/>} />
-                <Route path="/beats/:tier/payment" element={<BeatsPaymentPage/>} />
-                <Route path="/songs/:tier/payment" element={<SongsPaymentPage/>} />
+                <Route path="/beats/payment" element={<BeatsPaymentPage/>} />
+                <Route path="/songs/payment" element={<SongsPaymentPage/>} />
+                <Route path="/beats/payment/success" element={<BeatsPaymentSuccess/>} />
+                <Route path="/songs/payment/success" element={<SongsPaymentSuccess/>} />
             </Routes>
         </BrowserRouter>
     );
