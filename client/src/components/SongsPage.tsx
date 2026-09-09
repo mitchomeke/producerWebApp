@@ -76,6 +76,7 @@ export default function SongsPage(){
                             className="w-full appearance-none rounded-xl border border-zinc-700/60 bg-black/70 backdrop-blur-md px-4 py-2.5 pr-9 text-xs sm:text-sm font-medium text-white transition-colors hover:border-zinc-500 focus:border-white focus:outline-none cursor-pointer"
                         >
                             <option value="all">All Genres</option>
+                            <option value="funk">Funk</option>
                             <option value="rap">Rap</option>
                             <option value="drill">Drill</option>
                             <option value="rnb">R&B</option>

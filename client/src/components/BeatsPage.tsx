@@ -78,6 +78,7 @@ export default function BeatsPage (){
                         >
                             <option value="all">All Genres</option>
                             <option value="rap">Rap</option>
+                            <option value="funk">Funk</option>
                             <option value="drill">Drill</option>
                             <option value="rnb">R&B</option>
                         </select>

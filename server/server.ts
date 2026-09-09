@@ -3,10 +3,14 @@ import {BEATS_CATALOG} from './beats/beatsFile';
 import {SONGS_CATALOG} from './songs/songsFile';
 import cors from 'cors';
 import dotenv from 'dotenv';
+dotenv.config();
 import Stripe from 'stripe';
 import ffmpeg from 'fluent-ffmpeg';
+import ffmpegStatic from 'ffmpeg-static';
+
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
+
 const s3 = new S3Client({
     region: 'auto',
     endpoint: `https://${process.env.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,
@@ -15,7 +19,7 @@ const s3 = new S3Client({
         secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
     },
 });
-dotenv.config();
+
 
 const app = express();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
@@ -108,39 +112,101 @@ app.get('/beats', (req: Request, res: Response) => {
     }
 });
 
-app.get('/api/beats/preview/:id', async (req,res) => {
+if (ffmpegStatic) {
+    ffmpeg.setFfmpegPath(ffmpegStatic);
+}
+
+app.get('/api/beats/preview/:id', async (req: Request, res: Response) => {
+    let ffmpegCommand: ffmpeg.FfmpegCommand | null = null;
+    let fullAudioStream: Readable | null = null;
+
     try {
-        // @ts-ignore
         const id = Number(req.params.id);
-        const beat = BEATS_CATALOG.find(b => b.id === id);
-        if (!beat){
+        if (isNaN(id)) {
+            return res.status(400).json({ error: 'Invalid beat ID' });
+        }
+
+        const beat = BEATS_CATALOG.find((b) => b.id === id);
+        if (!beat) {
             return res.status(404).json({ error: 'Beat not found' });
         }
+
+        console.log(`[Preview] Fetching key "${beat.fileName}" from bucket "${beat.bucketName}"`);
+
         const s3Response = await s3.send(
             new GetObjectCommand({
                 Bucket: beat.bucketName,
                 Key: beat.fileName,
             })
         );
-        const fullAudioStream = s3Response.Body as Readable;
+
+        if (!s3Response.Body) {
+            return res.status(500).json({ error: 'Audio file body is empty' });
+        }
+
+        fullAudioStream = s3Response.Body as Readable;
+
         res.setHeader('Content-Type', 'audio/mpeg');
-        ffmpeg(fullAudioStream)
+        res.setHeader('Accept-Ranges', 'none');
+
+        // Create the FFmpeg instance directly (do NOT assign .pipe() to ffmpegCommand)
+        ffmpegCommand = ffmpeg(fullAudioStream)
             .setDuration(30)
             .audioBitrate(128)
             .format('mp3')
             .on('error', (err) => {
-                if (!res.headersSent) res.status(500).end();
-            }).pipe(res, {end:true});
-    } catch (err){
-        console.error(err);
-        res.status(500).send('Streaming error');
+                // Silently ignore normal client aborts, pauses, and forced kills
+                if (
+                    err.message.includes('Output stream closed') ||
+                    err.message.includes('SIGKILL') ||
+                    err.message.includes('premature close')
+                ) {
+                    return;
+                }
+                console.error('FFmpeg processing error:', err.message);
+                if (!res.headersSent) {
+                    res.status(500).end();
+                }
+            });
+
+        // Terminate FFmpeg and R2 read stream immediately when client navigates away or pauses
+        req.on('close', () => {
+            if (ffmpegCommand) {
+                try {
+                    ffmpegCommand.kill('SIGKILL');
+                } catch {
+                    // Process already ended
+                }
+            }
+            if (fullAudioStream) {
+                fullAudioStream.destroy();
+            }
+        });
+
+        // Pipe stream directly to the response
+        ffmpegCommand.pipe(res, { end: true });
+    } catch (err: any) {
+        console.error('Preview route failed with error:', err.name, err.message);
+        if (!res.headersSent) {
+            res.status(500).send('Streaming error');
+        }
     }
 });
-app.get('/api/songs/preview/:id', async (req,res) => {
+
+if (ffmpegStatic) {
+    ffmpeg.setFfmpegPath(ffmpegStatic);
+}
+app.get('/api/songs/preview/:id', async (req: Request, res: Response) => {
+    let ffmpegCommand: ffmpeg.FfmpegCommand | null = null;
+
     try {
-        const  id  = Number(req.params.id);
-        const song = SONGS_CATALOG.find(s => s.id === id);
-        if (!song){
+        const id = Number(req.params.id);
+        if (isNaN(id)) {
+            return res.status(400).json({ error: 'Invalid song ID' });
+        }
+
+        const song = SONGS_CATALOG.find((s) => s.id === id);
+        if (!song) {
             return res.status(404).json({ error: 'Song not found' });
         }
         const s3Response = await s3.send(
@@ -149,18 +215,56 @@ app.get('/api/songs/preview/:id', async (req,res) => {
                 Key: song.fileName,
             })
         );
+
+        if (!s3Response.Body) {
+            return res.status(500).json({ error: 'Audio file body is empty' });
+        }
+
         const fullAudioStream = s3Response.Body as Readable;
+
+        // 3. Set streaming headers
         res.setHeader('Content-Type', 'audio/mpeg');
-        ffmpeg(fullAudioStream)
+        res.setHeader('Accept-Ranges', 'none'); // Prevents browser range request loops
+
+        // 4. Create the command instance directly (do NOT chain .pipe() here)
+        ffmpegCommand = ffmpeg(fullAudioStream)
             .setDuration(30)
             .audioBitrate(128)
             .format('mp3')
             .on('error', (err) => {
-                if (!res.headersSent) res.status(500).end();
-            }).pipe(res, {end:true});
-    } catch (err){
-        console.error(err);
-        res.status(500).send('Streaming error');
+                // Ignore expected client aborts or SIGKILL termination
+                if (
+                    err.message.includes('Output stream closed') ||
+                    err.message.includes('SIGKILL') ||
+                    err.message.includes('premature close')
+                ) {
+                    return;
+                }
+                console.error('FFmpeg processing error:', err.message);
+                if (!res.headersSent) {
+                    res.status(500).end();
+                }
+            });
+
+        // 5. Clean up process if the user stops playback or closes the tab
+        req.on('close', () => {
+            if (ffmpegCommand) {
+                try {
+                    ffmpegCommand.kill('SIGKILL');
+                } catch {
+                    // Process already closed
+                }
+            }
+            fullAudioStream.destroy();
+        });
+
+        // 6. Pipe separately to the response
+        ffmpegCommand.pipe(res, { end: true });
+    } catch (err: any) {
+        console.error('Preview route error:', err?.message || err);
+        if (!res.headersSent) {
+            res.status(500).send('Streaming error');
+        }
     }
 });
 
@@ -310,6 +414,6 @@ app.listen(PORT, () => {
     console.log(`Backend running on http://localhost:${PORT}`);
 })
 
-    app.listen(5000, () => {
+    app.listen(5000, '0.0.0.0', () => {
         console.log('Node.js server listening on port 5000');
     });
