@@ -49,7 +49,7 @@ export default function BeatsPage (){
                     playsInline
                     className="h-full w-full object-cover"
                 >
-                    <source src="/videos/yeat.mp4" type="video/mp4" />
+                    <source src="/videos/zoro-bg.mp4" type="video/mp4" />
                 </video>
 
                 {/* Semi-transparent dark wash (adjust black/50 to black/70 depending on video brightness) */}
@@ -77,6 +77,10 @@ export default function BeatsPage (){
                             className="w-full appearance-none rounded-xl border border-zinc-700/60 bg-black/70 backdrop-blur-md px-4 py-2.5 pr-9 text-xs sm:text-sm font-medium text-white transition-colors hover:border-zinc-500 focus:border-white focus:outline-none cursor-pointer"
                         >
                             <option value="all">All Genres</option>
+                            <option value="pop">Pop</option>
+                            <option value="afrobeat">Afrobeat</option>
+                            <option value="jersey club">Jersey Club</option>
+                            <option value="phonk">Phonk</option>
                             <option value="rap">Rap</option>
                             <option value="funk">Funk</option>
                             <option value="drill">Drill</option>
@@ -96,6 +100,7 @@ export default function BeatsPage (){
                             className="w-full appearance-none rounded-xl border border-zinc-700/60 bg-black/70 backdrop-blur-md px-4 py-2.5 pr-9 text-xs sm:text-sm font-medium text-white transition-colors hover:border-zinc-500 focus:border-white focus:outline-none cursor-pointer"
                         >
                             <option value="all">All BPMs</option>
+                            <option value="70-80">70–80 BPM</option>
                             <option value="80-90">80–90 BPM</option>
                             <option value="90-100">90–100 BPM</option>
                             <option value="100-110">100–110 BPM</option>
@@ -118,6 +123,7 @@ export default function BeatsPage (){
                             className="w-full appearance-none rounded-xl border border-zinc-700/60 bg-black/70 backdrop-blur-md px-4 py-2.5 pr-9 text-xs sm:text-sm font-medium text-white transition-colors hover:border-zinc-500 focus:border-white focus:outline-none cursor-pointer"
                         >
                             <option value="all">All Prices</option>
+                            <option value="0-10">$0 – $10</option>
                             <option value="10-20">$10 – $20</option>
                             <option value="20-30">$20 – $30</option>
                             <option value="30-40">$30 – $40</option>

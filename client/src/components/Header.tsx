@@ -6,10 +6,7 @@ export default function Header() {
 
                 <div className="sm:absolute sm:left-1/2 sm:-translate-x-1/2">
                     <a
-                        href="https://www.youtube.com/channel/UCbfV7X9A2EVr3B9-nKByIlQ"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-2xl font-bold tracking-tight text-white transition-transform duration-200 hover:scale-105 inline-block"
+                        className="text-2xl font-bold tracking-tight text-white transition-transform duration-200 inline-block"
                     >
                         MITCH BEATS
                     </a>
@@ -17,19 +14,6 @@ export default function Header() {
 
                 {/* Social / Platform Icons on the Right */}
                 <div className="flex items-center gap-4">
-                    <a
-                        href="https://soundcloud.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="opacity-75 transition-all duration-200 hover:opacity-100 hover:scale-110"
-                    >
-                        <img
-                            src="/images/soundCloud.png"
-                            alt="SoundCloud"
-                            className="h-6 w-auto object-contain"
-                        />
-                    </a>
-
                     <a
                         href="https://beatstars.com/m1tch3ll"
                         target="_blank"
@@ -39,19 +23,6 @@ export default function Header() {
                         <img
                             src="/images/beatStars.png"
                             alt="BeatStars"
-                            className="h-6 w-auto object-contain"
-                        />
-                    </a>
-
-                    <a
-                        href="https://www.youtube.com/channel/UCbfV7X9A2EVr3B9-nKByIlQ"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="opacity-75 transition-all duration-200 hover:opacity-100 hover:scale-110"
-                    >
-                        <img
-                            src="/images/youtube.png"
-                            alt="YouTube"
                             className="h-6 w-auto object-contain"
                         />
                     </a>

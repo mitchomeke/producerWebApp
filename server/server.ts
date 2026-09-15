@@ -7,7 +7,8 @@ dotenv.config();
 import Stripe from 'stripe';
 import ffmpeg from 'fluent-ffmpeg';
 import ffmpegStatic from 'ffmpeg-static';
-
+import { Resend } from 'resend';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
 
@@ -20,18 +21,133 @@ const s3 = new S3Client({
     },
 });
 
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const app = express();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 app.use(cors({origin: process.env.CLIENT_URL}));
-app.use(express.json());
+
 
 if (!process.env.STRIPE_SECRET_KEY){
     console.error('FATAL: STRIPE_SECRET_KEY is missing from .env file');
     process.exit(1);
 }
 
+export async function createPresignedDownloadUrl(
+    bucketName: string,
+    downloadFile: string,
+    expiresInSeconds: number = 86400
+): Promise<string> {
+    const command = new GetObjectCommand({
+        Bucket: bucketName,
+        Key: downloadFile,
+        ResponseContentDisposition: `attachment; filename="${downloadFile}"`,
+    });
+    // Generate the signed URL using your existing s3 client instance
+    const presignedUrl = await getSignedUrl(s3 as any, command, { expiresIn: expiresInSeconds });
+    return presignedUrl;
+}
+
+app.post(
+    '/api/webhooks/stripe',
+    express.raw({ type: 'application/json' }),
+    async (req: Request, res: Response) => {
+        const sig = req.headers['stripe-signature'];
+        const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+        let event: Stripe.Event;
+
+        try {
+            if (!sig || !endpointSecret) {
+                throw new Error('Missing stripe-signature header or STRIPE_WEBHOOK_SECRET env variable');
+            }
+            // Verify signature using the raw Buffer
+            event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+        } catch (err: any) {
+            console.error(`⚠️ Webhook signature verification failed:`, err.message);
+            return res.status(400).send(`Webhook Error: ${err.message}`);
+        }
+
+        // Handle relevant events
+        switch (event.type) {
+            case 'checkout.session.completed': {
+                const session = event.data.object as Stripe.Checkout.Session;
+                const customerEmail = session.customer_details?.email;
+
+                console.log(`✅ Checkout completed for Session ID: ${session.id}`);
+
+                // 2. Identify what they bought (Beat or Song)
+                const beatId = session.metadata?.beatId;
+                const songId = session.metadata?.songId;
+                let secureDownloadUrl = null;
+
+                let itemName = '';
+
+                if (beatId) {
+                    const beat = BEATS_CATALOG.find(b => b.id === Number(beatId));
+                    if (beat && customerEmail) {
+                        itemName = beat.title;
+                        secureDownloadUrl = await createPresignedDownloadUrl(
+                            beat.bucketName,
+                            beat.downloadFile,
+                            86400
+                        );
+                    }
+                } else if (songId) {
+                    const song = SONGS_CATALOG.find(s => s.id === Number(songId));
+                    if (song && customerEmail) {
+                        itemName = song.name;
+                        secureDownloadUrl = createPresignedDownloadUrl(
+                            song.bucketName,
+                            song.downloadFile,
+                            86400
+                        );
+                    }
+                }
+                if (customerEmail && itemName){
+                    try {
+                        await resend.emails.send({
+                            // NOTE: Until you verify a custom domain in Resend, you MUST use this exact 'from' address
+                            from: 'Mitch Beats <onboarding@resend.dev>',
+                            // NOTE: Until you verify a domain, you can only send test emails to your OWN email address
+                            to: customerEmail,
+                            subject: `Your audio file is ready: ${itemName}`,
+                            html: `
+                                <h2>Thanks for your purchase!</h2>
+                                <p>Your payment was successful. You can download your high-quality audio files for <strong>${itemName}</strong> below:</p>
+                                <a href="${secureDownloadUrl}" style="display:inline-block; padding:12px 24px; background:#000; color:#fff; text-decoration:none; border-radius:4px; margin-top:10px;">
+                                    Download Files
+                                </a>
+                                <p style="margin-top: 20px; font-size: 12px; color: #666;">
+                                    If you have any issues, reply directly to this email.
+                                </p>
+                            `
+                        });
+                        console.log(`📧 Delivery email sent to ${customerEmail}`);
+                    } catch (emailError){
+                        console.error('Failed to send delivery email:', emailError);
+                    }
+                }
+                console.log(`✅ Checkout completed for Session ID: ${session.id}`);
+                console.log(`Customer: ${session.customer_details?.email}`);
+                console.log(`Item Metadata:`, session.metadata);
+                // Trigger fulfillment: save order to database or send delivery email
+                break;
+            }
+            case 'payment_intent.succeeded': {
+                console.log('💳 PaymentIntent succeeded');
+                break;
+            }
+            default:
+                console.log(`Unhandled event type: ${event.type}`);
+        }
+
+        res.status(200).json({ received: true });
+    }
+);
+
+app.use(express.json());
 
 
 app.get('/songs',(req: Request, res: Response) => {
@@ -117,8 +233,25 @@ if (ffmpegStatic) {
 }
 
 app.get('/api/beats/preview/:id', async (req: Request, res: Response) => {
+
     let ffmpegCommand: ffmpeg.FfmpegCommand | null = null;
     let fullAudioStream: Readable | null = null;
+    let isAborted = false;
+
+    // Set up connection teardown listener before starting async work
+    req.on('close', () => {
+        isAborted = true;
+        if (ffmpegCommand) {
+            try {
+                ffmpegCommand.kill('SIGTERM');
+            } catch {
+                // Process already cleaned up
+            }
+        }
+        if (fullAudioStream && !fullAudioStream.destroyed) {
+            fullAudioStream.destroy();
+        }
+    });
 
     try {
         const id = Number(req.params.id);
@@ -131,6 +264,9 @@ app.get('/api/beats/preview/:id', async (req: Request, res: Response) => {
             return res.status(404).json({ error: 'Beat not found' });
         }
 
+        // Stop early if client disconnected during catalog lookup
+        if (isAborted) return;
+
         console.log(`[Preview] Fetching key "${beat.fileName}" from bucket "${beat.bucketName}"`);
 
         const s3Response = await s3.send(
@@ -140,26 +276,38 @@ app.get('/api/beats/preview/:id', async (req: Request, res: Response) => {
             })
         );
 
+        if (isAborted) return;
+
         if (!s3Response.Body) {
             return res.status(500).json({ error: 'Audio file body is empty' });
         }
 
         fullAudioStream = s3Response.Body as Readable;
 
+        // Suppress unhandled stream destroy errors caused by client cancellations
+        fullAudioStream.on('error', (streamErr: any) => {
+            if (streamErr.code === 'ERR_STREAM_PREMATURE_CLOSE' || isAborted) return;
+            console.error('R2 Stream error:', streamErr.message);
+        });
+
         res.setHeader('Content-Type', 'audio/mpeg');
         res.setHeader('Accept-Ranges', 'none');
+        res.setHeader('Connection', 'close'); // Instructs browser not to reuse or pool this socket
 
-        // Create the FFmpeg instance directly (do NOT assign .pipe() to ffmpegCommand)
         ffmpegCommand = ffmpeg(fullAudioStream)
             .setDuration(30)
+            .audioChannels(2)
+            .audioFrequency(44100)
             .audioBitrate(128)
             .format('mp3')
             .on('error', (err) => {
-                // Silently ignore normal client aborts, pauses, and forced kills
+                // Silently ignore normal aborts, pauses, socket resets, and kills
                 if (
+                    isAborted ||
                     err.message.includes('Output stream closed') ||
                     err.message.includes('SIGKILL') ||
-                    err.message.includes('premature close')
+                    err.message.includes('premature close') ||
+                    err.message.includes('broken pipe')
                 ) {
                     return;
                 }
@@ -169,26 +317,13 @@ app.get('/api/beats/preview/:id', async (req: Request, res: Response) => {
                 }
             });
 
-        // Terminate FFmpeg and R2 read stream immediately when client navigates away or pauses
-        req.on('close', () => {
-            if (ffmpegCommand) {
-                try {
-                    ffmpegCommand.kill('SIGKILL');
-                } catch {
-                    // Process already ended
-                }
-            }
-            if (fullAudioStream) {
-                fullAudioStream.destroy();
-            }
-        });
-
-        // Pipe stream directly to the response
         ffmpegCommand.pipe(res, { end: true });
     } catch (err: any) {
-        console.error('Preview route failed with error:', err.name, err.message);
-        if (!res.headersSent) {
-            res.status(500).send('Streaming error');
+        if (!isAborted) {
+            console.error('Preview route failed with error:', err.name, err.message);
+            if (!res.headersSent) {
+                res.status(500).send('Streaming error');
+            }
         }
     }
 });
@@ -198,17 +333,39 @@ if (ffmpegStatic) {
 }
 app.get('/api/songs/preview/:id', async (req: Request, res: Response) => {
     let ffmpegCommand: ffmpeg.FfmpegCommand | null = null;
+    let fullAudioStream: Readable | null = null;
+    let isAborted = false;
+
+    // Track if client disconnected
+    req.on('close', () => {
+        isAborted = true;
+        if (ffmpegCommand) {
+            try {
+                // Send softer SIGTERM or SIGKILL safely
+                ffmpegCommand.kill('SIGTERM');
+            } catch {
+                // Process already cleaned up
+            }
+        }
+        if (fullAudioStream && !fullAudioStream.destroyed) {
+            fullAudioStream.destroy();
+        }
+    });
 
     try {
         const id = Number(req.params.id);
         if (isNaN(id)) {
-            return res.status(400).json({ error: 'Invalid song ID' });
+            return res.status(400).json({ error: 'Invalid ID' });
         }
 
         const song = SONGS_CATALOG.find((s) => s.id === id);
         if (!song) {
             return res.status(404).json({ error: 'Song not found' });
         }
+
+        // Abort early if client already gave up during ID lookup
+        if (isAborted) return;
+
         const s3Response = await s3.send(
             new GetObjectCommand({
                 Bucket: song.bucketName,
@@ -216,27 +373,34 @@ app.get('/api/songs/preview/:id', async (req: Request, res: Response) => {
             })
         );
 
-        if (!s3Response.Body) {
-            return res.status(500).json({ error: 'Audio file body is empty' });
-        }
+        if (isAborted) return;
 
-        const fullAudioStream = s3Response.Body as Readable;
+        fullAudioStream = s3Response.Body as Readable;
 
-        // 3. Set streaming headers
+        // Suppress unhandled stream destroy errors
+        fullAudioStream.on('error', (streamErr: any) => {
+            if (streamErr.code === 'ERR_STREAM_PREMATURE_CLOSE' || isAborted) return;
+            console.error('R2 Stream error:', streamErr.message);
+        });
+
         res.setHeader('Content-Type', 'audio/mpeg');
-        res.setHeader('Accept-Ranges', 'none'); // Prevents browser range request loops
+        res.setHeader('Accept-Ranges', 'none');
+        res.setHeader('Connection', 'close'); // Tells browser not to reuse or pool this dynamic socket
 
-        // 4. Create the command instance directly (do NOT chain .pipe() here)
         ffmpegCommand = ffmpeg(fullAudioStream)
             .setDuration(30)
+            .audioChannels(2)
+            .audioFrequency(44100)
             .audioBitrate(128)
             .format('mp3')
             .on('error', (err) => {
-                // Ignore expected client aborts or SIGKILL termination
+                // Silently ignore expected client disconnects
                 if (
+                    isAborted ||
                     err.message.includes('Output stream closed') ||
                     err.message.includes('SIGKILL') ||
-                    err.message.includes('premature close')
+                    err.message.includes('premature close') ||
+                    err.message.includes('broken pipe')
                 ) {
                     return;
                 }
@@ -246,24 +410,13 @@ app.get('/api/songs/preview/:id', async (req: Request, res: Response) => {
                 }
             });
 
-        // 5. Clean up process if the user stops playback or closes the tab
-        req.on('close', () => {
-            if (ffmpegCommand) {
-                try {
-                    ffmpegCommand.kill('SIGKILL');
-                } catch {
-                    // Process already closed
-                }
-            }
-            fullAudioStream.destroy();
-        });
-
-        // 6. Pipe separately to the response
         ffmpegCommand.pipe(res, { end: true });
     } catch (err: any) {
-        console.error('Preview route error:', err?.message || err);
-        if (!res.headersSent) {
-            res.status(500).send('Streaming error');
+        if (!isAborted) {
+            console.error('Preview error:', err?.message || err);
+            if (!res.headersSent) {
+                res.status(500).send('Streaming error');
+            }
         }
     }
 });
@@ -373,10 +526,15 @@ app.get('/api/verify-session/beats', async (req, res) => {
        if (!beat){
            return res.status(404).json({ error: 'Beat not found' });
        }
+       const downloadUrl = createPresignedDownloadUrl(
+           beat.bucketName,
+           beat.downloadFile,
+           3600
+       );
        res.json({
            title: beat.title,
            customerEmail: session.customer_details?.email,
-           downloadUrl: `${beat.audioUrl}/${encodeURIComponent(String(beat.fileName))}`,
+           downloadUrl,
        });
     } catch (err: any){
        console.error('Session verification error:', err);
@@ -398,10 +556,15 @@ app.get('/api/verify-session/songs', async (req, res) => {
         if (!song){
             return res.status(404).json({ error: 'Song not found' });
         }
+        const downloadUrl = createPresignedDownloadUrl(
+            song.bucketName,
+            song.downloadFile,
+            3600
+        );
         res.json({
             title: song.name,
             customerEmail: session.customer_details?.email,
-            downloadUrl: `${song.audioUrl}/${encodeURIComponent(String(song.fileName))}`,
+            downloadUrl,
         });
     } catch (err: any){
         console.error('Session verification error:', err);
