@@ -1,5 +1,7 @@
 import {useState, useEffect} from "react";
 import {useParams, Link, useNavigate} from 'react-router-dom';
+import {API_URL} from "../config.ts";
+
 interface Song {
     id: number,
     name: string,
@@ -24,7 +26,7 @@ export default function SongsPage(){
     const starCount = tier ? tier.split('-')[0] : '';
 
     useEffect(() => {
-        fetch(`http://localhost:5000/songs?tier=${starCount}&selectedBpm=${selectedBpm}&selectedPrice=${selectedPrice}&selectedGenre=${selectedGenre}&search=${search}`)
+        fetch(`${API_URL}/songs?tier=${starCount}&selectedBpm=${selectedBpm}&selectedPrice=${selectedPrice}&selectedGenre=${selectedGenre}&search=${search}`)
             .then((res) => res.json())
             .then((data) => {
                 setSongs(data)
@@ -220,7 +222,7 @@ export default function SongsPage(){
                                         controls
                                         controlsList="nodownload"
                                         onContextMenu={(e) => e.preventDefault()}
-                                        src={`http://localhost:5000/api/songs/preview/${song.id}`}
+                                        src={`${API_URL}/api/songs/preview/${song.id}`}
                                         onPlay={(e) => {
                                             document.querySelectorAll('audio').forEach((audio) => {
                                                 if (audio != e.currentTarget){

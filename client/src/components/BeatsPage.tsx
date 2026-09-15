@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import {useParams, Link, useNavigate} from 'react-router-dom';
+import {API_URL} from "../config.ts";
 
 interface Beat {
     id: number;
@@ -25,7 +26,7 @@ export default function BeatsPage (){
     const starCount = tier ? tier.split('-')[0] : '';
 
     useEffect(() => {
-        fetch(`http://localhost:5000/beats?tier=${starCount}&selectedBpm=${selectedBpm}&selectedPrice=${selectedPrice}&selectedGenre=${selectedGenre}&search=${search}`)
+        fetch(`${API_URL}/beats?tier=${starCount}&selectedBpm=${selectedBpm}&selectedPrice=${selectedPrice}&selectedGenre=${selectedGenre}&search=${search}`)
             .then((res) => res.json())
             .then((data) => {
                 setBeats(data);
@@ -206,7 +207,7 @@ export default function BeatsPage (){
                                        controlsList="nodownload"
                                        onContextMenu={(e) => e.preventDefault()}
                                        preload="none"
-                                       src={`http://localhost:5000/api/beats/preview/${beat.id}`}
+                                       src={`${API_URL}/api/beats/preview/${beat.id}`}
                                        onPlay={(e) => {
                                            document.querySelectorAll('audio').forEach((audio)=>
                                           {

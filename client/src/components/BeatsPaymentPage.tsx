@@ -1,6 +1,7 @@
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {useState, useEffect} from "react";
 import * as React from "react";
+import {API_URL} from "../config.ts";
 
 export default function BeatsPaymentPage() {
     interface Beat {
@@ -30,7 +31,7 @@ export default function BeatsPaymentPage() {
         setIsLoading(true);
         setError(null);
 
-        fetch(`http://localhost:5000/beats/getBeat?id=${beatId}`)
+        fetch(`${API_URL}/beats/getBeat?id=${beatId}`)
             .then((res) =>{
                 if (!res.ok) throw new Error('Failed to load beat');
                 return res.json();
@@ -53,7 +54,7 @@ export default function BeatsPaymentPage() {
         }
         setIsProcessing(true);
         try {
-            const res = await fetch('/api/create-checkout-session/beats', {
+            const res = await fetch(`${API_URL}/api/create-checkout-session/beats`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({

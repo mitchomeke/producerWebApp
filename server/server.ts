@@ -26,7 +26,14 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const app = express();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
-app.use(cors({origin: process.env.CLIENT_URL}));
+app.use(cors({
+    origin: [
+        'http://localhost:5173',
+        'http://localhost:3000',
+        process.env.CLIENT_URL,
+    ].filter((url): url is string => Boolean(url)),
+    credentials: true,
+}));
 
 
 if (!process.env.STRIPE_SECRET_KEY){

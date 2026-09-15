@@ -1,5 +1,6 @@
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {useState, useEffect} from "react";
+import {API_URL} from "../config.ts";
 import * as React from "react";
 
 export default function SongPaymentPage () {
@@ -30,7 +31,7 @@ export default function SongPaymentPage () {
         setIsLoading(true);
         setError(null);
 
-        fetch(`http://localhost:5000/songs/getSong?id=${songId}`)
+        fetch(`${API_URL}/songs/getSong?id=${songId}`)
             .then((res) =>{
                 if (!res.ok) throw new Error('Failed to load song');
                 return res.json();
@@ -52,7 +53,7 @@ export default function SongPaymentPage () {
         }
         setIsProcessing(true);
         try {
-            const res = await fetch('/api/create-checkout-session/songs', {
+            const res = await fetch(`${API_URL}/api/create-checkout-session/songs`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({

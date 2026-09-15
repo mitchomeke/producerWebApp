@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import {useSearchParams} from "react-router-dom";
+import {API_URL} from "../config.ts";
 
 interface PurchaseDetails  {
     title: string,
@@ -20,7 +21,7 @@ export default function SongsPaymentSuccess () {
             setIsLoading(false);
             return;
         }
-        fetch(`http://localhost:5000/api/verify-session?session_id=${sessionId}`)
+        fetch(`${API_URL}/api/verify-session/songs?session_id=${sessionId}`)
             .then((res) => {
                 if (!res.ok) throw new Error('Could not verify payment session');
                 return res.json();
