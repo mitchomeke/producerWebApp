@@ -30,6 +30,8 @@ app.use(cors({
     origin: [
         'http://localhost:5173',
         'http://localhost:3000',
+        'http://mitchbeats.com',
+        'http://www.mitchbeats.com',
         process.env.CLIENT_URL,
     ].filter((url): url is string => Boolean(url)),
     credentials: true,
