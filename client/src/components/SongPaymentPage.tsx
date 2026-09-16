@@ -58,15 +58,20 @@ export default function SongPaymentPage () {
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     songId: song.id,
-                    customerEmail: email,
+                    customerEmail: email.trim(),
                 }),
             });
             const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error || 'Failed to initialize checkout');
+            }
             if (data.url){
                 window.location.href = data.url;
             }
         } catch (err) {
             console.error('Checkout error:',err);
+            // @ts-ignore
+            alert(err.message || 'Unable to start checkout. Please try again.');
             setIsProcessing(false);
         }
     };

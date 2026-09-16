@@ -465,13 +465,13 @@ app.get('/beats/getBeat',(req: Request, res: Response) => {
 app.post('/create-checkout-session/beats', async (req, res) => {
     try {
         const {beatId, customerEmail} = req.body;
-        const beat = BEATS_CATALOG.find(b => b.id === beatId);
+        const beat = BEATS_CATALOG.find(b => String(b.id) === String(beatId));
         if (!beat){
             return res.status(404).json({error: 'Beat not found'});
         }
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
-            customer_email: customerEmail,
+            customer_email: customerEmail.trim() || undefined,
             line_items: [
                 {
                     price_data: {
@@ -486,7 +486,7 @@ app.post('/create-checkout-session/beats', async (req, res) => {
             ],
             mode: 'payment',
             metadata: {
-                songId: String(beat.id),
+                beatId: String(beat.id),
             },
             success_url: `${process.env.CLIENT_URL}/beats/payment/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${process.env.CLIENT_URL}/beats`,
@@ -501,13 +501,13 @@ app.post('/create-checkout-session/beats', async (req, res) => {
 app.post('/create-checkout-session/songs', async (req, res) => {
     try {
         const {songId, customerEmail} = req.body;
-        const song = SONGS_CATALOG.find(s => s.id === songId);
+        const song = SONGS_CATALOG.find(s => String(s.id) === String(songId));
         if (!song){
             return res.status(404).json({error: 'Song not found'});
         }
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
-            customer_email: customerEmail,
+            customer_email: customerEmail.trim() || undefined,
             line_items: [
                 {
                     price_data: {
