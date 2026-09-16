@@ -200,7 +200,7 @@ export const BEATS_CATALOG = [
         fileName: 'not my baby beat.mp3',
         downloadFile: 'not my baby beat.wav',
         bucketName: 'public-beats',
-        price: 40,
+        price: 42,
         audioUrl: `https://pub-246a11c0233344ad97feacb33e658f49.r2.dev`
     },
     {
