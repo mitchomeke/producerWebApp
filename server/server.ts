@@ -536,7 +536,7 @@ app.post('/create-checkout-session/songs', async (req, res) => {
 
 app.get('/api/verify-session/beats', async (req, res) => {
    try {
-       const sessionId = req.query;
+       const sessionId = (req.query.session_id || req.query.sessionId) as string;
        if (!sessionId || typeof sessionId !== 'string'){
            return res.status(400).json({error: 'Missing session_id'});
        }
@@ -566,7 +566,7 @@ app.get('/api/verify-session/beats', async (req, res) => {
 });
 app.get('/api/verify-session/songs', async (req, res) => {
     try {
-        const sessionId = req.query;
+        const sessionId = (req.query.session_id || req.query.sessionId) as string;
         if (!sessionId || typeof sessionId !== 'string'){
             return res.status(400).json({error: 'Missing session_id'});
         }
