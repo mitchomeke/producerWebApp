@@ -462,7 +462,7 @@ app.get('/beats/getBeat',(req: Request, res: Response) => {
     return res.json(beat)
 })
 
-app.get('/api/create-checkout-session/beats', async (req, res) => {
+app.post('/create-checkout-session/beats', async (req, res) => {
     try {
         const {beatId, customerEmail} = req.body;
         const beat = BEATS_CATALOG.find(b => b.id === beatId);
@@ -498,7 +498,7 @@ app.get('/api/create-checkout-session/beats', async (req, res) => {
     }
 });
 
-app.get('/api/create-checkout-session/songs', async (req, res) => {
+app.post('/create-checkout-session/songs', async (req, res) => {
     try {
         const {songId, customerEmail} = req.body;
         const song = SONGS_CATALOG.find(s => s.id === songId);

@@ -54,7 +54,7 @@ export default function BeatsPaymentPage() {
         }
         setIsProcessing(true);
         try {
-            const res = await fetch(`${API_URL}/api/create-checkout-session/beats`, {
+            const res = await fetch(`${API_URL}/create-checkout-session/beats`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
