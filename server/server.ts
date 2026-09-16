@@ -541,20 +541,25 @@ app.get('/api/verify-session/beats', async (req, res) => {
            return res.status(400).json({error: 'Missing session_id'});
        }
        const session = await stripe.checkout.sessions.retrieve(sessionId);
-       if (session.payment_status !== 'paid'){
-           return res.status(402).json({ error: 'Payment not completed or pending' });
+       const isValid =
+           (session.payment_status === 'paid' || session.payment_status === 'no_payment_required') &&
+           session.status === 'complete';
+
+       if (!isValid) {
+           return res.status(402).json({ error: 'Order verification failed' });
        }
        const beatId = Number(session.metadata?.beatId);
        const beat = BEATS_CATALOG.find(b => b.id === beatId);
        if (!beat){
            return res.status(404).json({ error: 'Beat not found' });
        }
-       const downloadUrl = createPresignedDownloadUrl(
+       const downloadUrl = await createPresignedDownloadUrl(
            beat.bucketName,
            beat.downloadFile,
            3600
        );
        res.json({
+           success: true,
            title: beat.title,
            customerEmail: session.customer_details?.email,
            downloadUrl,
@@ -571,20 +576,25 @@ app.get('/api/verify-session/songs', async (req, res) => {
             return res.status(400).json({error: 'Missing session_id'});
         }
         const session = await stripe.checkout.sessions.retrieve(sessionId);
-        if (session.payment_status !== 'paid'){
-            return res.status(402).json({ error: 'Payment not completed or pending' });
+        const isValid =
+            (session.payment_status === 'paid' || session.payment_status === 'no_payment_required') &&
+            session.status === 'complete';
+
+        if (!isValid) {
+            return res.status(402).json({ error: 'Order verification failed' });
         }
         const songId = Number(session.metadata?.songId);
         const song = SONGS_CATALOG.find(s => s.id === songId);
         if (!song){
             return res.status(404).json({ error: 'Song not found' });
         }
-        const downloadUrl = createPresignedDownloadUrl(
+        const downloadUrl = await createPresignedDownloadUrl(
             song.bucketName,
             song.downloadFile,
             3600
         );
         res.json({
+            success: true,
             title: song.name,
             customerEmail: session.customer_details?.email,
             downloadUrl,

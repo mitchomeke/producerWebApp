@@ -1,42 +1,62 @@
-import {useEffect, useState} from "react";
-import {useSearchParams} from "react-router-dom";
-import {API_URL} from "../config.ts";
+import { useEffect, useState, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
+import { API_URL } from "../config.ts";
 
 interface PurchaseDetails {
-    title: string,
+    title: string;
     customerEmail: string;
     downloadUrl: string;
 }
 
-export default function BeatsPaymentSuccess (){
-    const [isLoading, setIsLoading] = useState(false);
+export default function BeatsPaymentSuccess() {
     const [searchParams] = useSearchParams();
     const sessionId = searchParams.get('session_id');
+
+    // Default to true so the error card does not flash before the request begins
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const [details,setDetails] = useState<PurchaseDetails | null>(null);
+    const [details, setDetails] = useState<PurchaseDetails | null>(null);
+
+    // Guard against React 18 duplicate effect execution
+    const hasRequested = useRef(false);
 
     useEffect(() => {
-        if (!sessionId){
-            setError('Invalid or missing checkoutId.');
+        if (!sessionId) {
+            setError('Invalid or missing checkout session ID.');
             setIsLoading(false);
             return;
         }
-        fetch(`${API_URL}/api/verify-session/beats?session_id=${sessionId}`)
-            .then((res) => {
-                if (!res.ok) throw new Error('Could not verify payment session');
-                return res.json();
-            })
-            .then((data) => {
+
+        if (hasRequested.current) return;
+        hasRequested.current = true;
+
+        const verifySession = async () => {
+            try {
+                const res = await fetch(`${API_URL}/api/verify-session/beats?session_id=${sessionId}`);
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.error || 'Could not verify payment session.');
+                }
+
+                // Verify the downloadUrl is a valid string
+                if (!data.downloadUrl || typeof data.downloadUrl !== 'string') {
+                    throw new Error('Secure download link could not be prepared. Please refresh.');
+                }
+
                 setDetails(data);
+            } catch (err: any) {
+                console.error('Session verification error:', err);
+                setError(err.message || 'Payment verification failed.');
+            } finally {
                 setIsLoading(false);
-            })
-            .catch((err) => {
-                console.error(err);
-                setError(err.message);
-                setIsLoading(false);
-            });
+            }
+        };
+
+        verifySession();
     }, [sessionId]);
 
+    // 1. Loading State
     if (isLoading) {
         return (
             <div className="min-h-screen w-full flex items-center justify-center bg-black text-white p-4 font-sans">
@@ -49,7 +69,7 @@ export default function BeatsPaymentSuccess (){
         );
     }
 
-    // Error Screen
+    // 2. Error State
     if (error || !details) {
         return (
             <div className="min-h-screen w-full flex items-center justify-center bg-black text-white p-4 font-sans">
@@ -68,7 +88,7 @@ export default function BeatsPaymentSuccess (){
         );
     }
 
-    // Success Screen
+    // 3. Success State
     return (
         <div className="relative min-h-screen w-full flex items-center justify-center p-4 sm:p-6 text-white font-sans">
             <div className="fixed inset-0 bg-black/70 backdrop-blur-xl -z-10" />
@@ -76,12 +96,12 @@ export default function BeatsPaymentSuccess (){
             <div className="w-full max-w-xl rounded-2xl border border-zinc-800 bg-black/80 p-6 sm:p-8 backdrop-blur-md shadow-2xl">
                 {/* Top Badge */}
                 <div className="flex items-center gap-2 mb-4">
-          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold">
-            ✓
-          </span>
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold">
+                        ✓
+                    </span>
                     <span className="text-xs font-semibold tracking-wider text-emerald-400 uppercase">
-            Payment Confirmed
-          </span>
+                        Payment Confirmed
+                    </span>
                 </div>
 
                 <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
@@ -89,7 +109,7 @@ export default function BeatsPaymentSuccess (){
                 </h1>
                 <p className="mt-2 text-xs sm:text-sm text-zinc-400">
                     Your license for <span className="text-white font-medium">{details.title}</span> is now active. A copy of the receipt was sent to{' '}
-                    <span className="text-white">{details.customerEmail}</span>.
+                    <span className="text-white">{details.customerEmail || 'your email'}</span>.
                 </p>
 
                 {/* Download Box */}
@@ -100,13 +120,14 @@ export default function BeatsPaymentSuccess (){
                             <p className="text-xs text-zinc-500 mt-0.5">WAV + 320kbps MP3</p>
                         </div>
                         <span className="text-xs font-mono bg-zinc-800 px-2 py-1 rounded text-zinc-300">
-              ZIP ARCHIVE
-            </span>
+                            ZIP ARCHIVE
+                        </span>
                     </div>
 
                     <a
                         href={details.downloadUrl}
-                        download
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="flex items-center justify-center gap-2 w-full rounded-xl bg-white py-3.5 px-4 text-xs sm:text-sm font-bold text-black transition-all hover:bg-zinc-200 active:scale-[0.99] shadow-lg"
                     >
                         <span>Download Master Files</span>
