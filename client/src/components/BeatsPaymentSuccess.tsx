@@ -108,7 +108,7 @@ export default function BeatsPaymentSuccess() {
                     Thank you for your purchase!
                 </h1>
                 <p className="mt-2 text-xs sm:text-sm text-zinc-400">
-                    Your license for <span className="text-white font-medium">{details.title}</span> is now active. A copy of the receipt was sent to{' '}
+                    Your license for <span className="text-white font-medium">{details.title}</span> is now active. Thank you{' '}
                     <span className="text-white">{details.customerEmail || 'your email'}</span>.
                 </p>
 
@@ -117,11 +117,8 @@ export default function BeatsPaymentSuccess() {
                     <div className="flex justify-between items-center">
                         <div>
                             <p className="text-sm font-semibold text-white">{details.title} (Master Package)</p>
-                            <p className="text-xs text-zinc-500 mt-0.5">WAV + 320kbps MP3</p>
+                            <p className="text-xs text-zinc-500 mt-0.5">WAV</p>
                         </div>
-                        <span className="text-xs font-mono bg-zinc-800 px-2 py-1 rounded text-zinc-300">
-                            ZIP ARCHIVE
-                        </span>
                     </div>
 
                     <a
