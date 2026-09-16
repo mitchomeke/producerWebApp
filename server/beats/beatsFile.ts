@@ -572,7 +572,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.227.mp3',
         downloadFile: 'untitled.227.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -584,7 +584,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.405.4.mp3',
         downloadFile: 'untitled.405.4.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -596,7 +596,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.408.mp3',
         downloadFile: 'untitled.408.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -608,7 +608,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.409 2 low.mp3',
         downloadFile: 'untitled.409 2 low.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -932,7 +932,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.100.mp3',
         downloadFile: 'untitled.100.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -944,7 +944,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.106.mp3',
         downloadFile: 'untitled.106.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -956,7 +956,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.120.mp3',
         downloadFile: 'untitled.120.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -968,7 +968,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.124.mp3',
         downloadFile: 'untitled.124.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -980,7 +980,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.133.mp3',
         downloadFile: 'untitled.133.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -992,7 +992,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.152.mp3',
         downloadFile: 'untitled.152.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -1004,7 +1004,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.153.mp3',
         downloadFile: 'untitled.153.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -1016,7 +1016,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.154.mp3',
         downloadFile: 'untitled.154.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -1028,7 +1028,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.155.mp3',
         downloadFile: 'untitled.155.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -1040,7 +1040,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.159.mp3',
         downloadFile: 'untitled.159.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -1052,7 +1052,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.160.mp3',
         downloadFile: 'untitled.160.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -1064,7 +1064,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.161.mp3',
         downloadFile: 'untitled.161.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -1076,7 +1076,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.164.mp3',
         downloadFile: 'untitled.164.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -1088,7 +1088,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.167.mp3',
         downloadFile: 'untitled.167.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -1100,7 +1100,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.168.mp3',
         downloadFile: 'untitled.168.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -1112,7 +1112,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.176.mp3',
         downloadFile: 'untitled.176.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -1124,7 +1124,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.182.mp3',
         downloadFile: 'untitled.182.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -1136,7 +1136,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.198.2.mp3',
         downloadFile: 'untitled.198.2.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -1148,7 +1148,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.206.mp3',
         downloadFile: 'untitled.206.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -1160,7 +1160,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.285.mp3',
         downloadFile: 'untitled.285.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
@@ -1172,7 +1172,7 @@ export const BEATS_CATALOG = [
         fileName: 'untitled.288.mp3',
         downloadFile: 'untitled.288.wav',
         bucketName: '1-star-beats',
-        price: 0,
+        price: 1,
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
 ];
