@@ -49,7 +49,7 @@ export default function SongsPage(){
                     playsInline
                     className="h-full w-full object-cover"
                 >
-                    <source src="/videos/zoro-bg.mp4" type="video/mp4" />
+                    <source src="https://pub-1e569b6d799147f59ef0a615ac232401.r2.dev/zoro-bg.mp4" type="video/mp4" />
                 </video>
 
                 {/* Semi-transparent dark wash */}

@@ -26,15 +26,29 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const app = express();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
+const allowedOrigins: string[] = [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://mitchbeats.com',
+    'https://www.mitchbeats.com',
+    process.env.CLIENT_URL || '',
+].filter((url): url is string => Boolean(url));
+
 app.use(cors({
-    origin: [
-        'http://localhost:5173',
-        'http://localhost:3000',
-        'http://mitchbeats.com',
-        'http://www.mitchbeats.com',
-        process.env.CLIENT_URL,
-    ].filter((url): url is string => Boolean(url)),
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps, curl, or server-to-server)
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        } else {
+            console.warn(`CORS blocked request from origin: ${origin}`);
+            return callback(new Error(`Origin ${origin} not allowed by CORS`));
+        }
+    },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
 

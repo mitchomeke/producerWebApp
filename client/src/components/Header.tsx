@@ -21,7 +21,7 @@ export default function Header() {
                         className="opacity-75 transition-all duration-200 hover:opacity-100 hover:scale-110"
                     >
                         <img
-                            src="/images/beatStars.png"
+                            src="https://pub-1e569b6d799147f59ef0a615ac232401.r2.dev/beatStars.png"
                             alt="BeatStars"
                             className="h-6 w-auto object-contain"
                         />
