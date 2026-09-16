@@ -53,7 +53,7 @@ export default function SongPaymentPage () {
         }
         setIsProcessing(true);
         try {
-            const res = await fetch(`${API_URL}/create-checkout-session/songs'`, {
+            const res = await fetch(`${API_URL}/create-checkout-session/songs`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
