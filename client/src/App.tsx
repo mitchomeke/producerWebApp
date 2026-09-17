@@ -18,15 +18,14 @@ function HomePage(){
             <Header />
             <main>
                 <Hero />
-                <BeatsSection />
                 <SongSection />
+                <BeatsSection />
             </main>
             <ContactInfo />
         </div>
     )
 }
 export default function App() {
-    // @ts-ignore
     return (
         <BrowserRouter>
             <Routes>

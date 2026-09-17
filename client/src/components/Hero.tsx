@@ -4,6 +4,8 @@ export default function Hero(){
     return (
         <section className="relative h-[55vh] w-full overflow-hidden flex items-center justify-center">
             <video
+                controls
+                preload="metadata"
                 autoPlay
                 loop
                 muted
