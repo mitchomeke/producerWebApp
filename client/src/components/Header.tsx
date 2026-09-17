@@ -10,9 +10,13 @@ export default function Header() {
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center select-none pointer-events-auto">
                     <a
                         href="/"
-                        className="text-lg sm:text-2xl font-black tracking-widest text-white transition-opacity hover:opacity-90 active:scale-95 duration-150 inline-block uppercase"
+                        className="inline-flex items-center transition-transform hover:opacity-90 active:scale-95 duration-150"
                     >
-                        MITCH BEATS
+                        <img
+                            src="/logo.png"
+                            alt="Mitch Beats"
+                            className="h-8 sm:h-10 w-auto object-contain"
+                        />
                     </a>
                 </div>
 

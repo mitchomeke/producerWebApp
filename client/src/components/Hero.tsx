@@ -3,7 +3,7 @@ export default function Hero() {
         <section className="relative h-[55vh] w-full overflow-hidden flex items-center justify-center">
             {/* 1. Background Image pinned behind content */}
             <img
-                src="https://pub-1e569b6d799147f59ef0a615ac232401.r2.dev/zoro.png"
+                src="/zoro.png"
                 alt="Background"
                 className="absolute inset-0 h-full w-full object-cover blur-sm scale-110 pointer-events-none"
             />

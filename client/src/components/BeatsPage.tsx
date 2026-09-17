@@ -42,7 +42,7 @@ export default function BeatsPage (){
             {/* 1. Background Video Layer */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
                 <img
-                    src="https://pub-1e569b6d799147f59ef0a615ac232401.r2.dev/zoro.png"
+                    src="/zoro.png"
                     alt="Background"
                     className="h-full w-full object-cover blur-md scale-110"
                 />
