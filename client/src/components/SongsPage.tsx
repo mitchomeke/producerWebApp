@@ -42,11 +42,6 @@ export default function SongsPage(){
         <main className="relative min-h-screen bg-black text-white px-4 py-8 sm:px-6 sm:py-16">
             {/* 1. Background Video Layer */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-                <img
-                    src="/zoro.png"
-                    alt="Background"
-                    className="h-full w-full object-cover blur-md scale-110"
-                />
 
                 {/* Semi-transparent dark wash */}
                 <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />

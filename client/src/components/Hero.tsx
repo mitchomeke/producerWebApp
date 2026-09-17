@@ -1,12 +1,17 @@
 export default function Hero() {
     return (
         <section className="relative h-[55vh] w-full overflow-hidden flex items-center justify-center">
-            {/* 1. Background Image pinned behind content */}
-            <img
-                src="/zoro.png"
-                alt="Background"
-                className="absolute inset-0 h-full w-full object-cover blur-sm scale-110 pointer-events-none"
-            />
+            {/* 1. Background Video pinned behind content */}
+            <video
+                preload="auto"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 h-full w-full object-cover blur-md scale-110 pointer-events-none"
+            >
+                <source src="/zoro-bg2.mp4" type="video/mp4" />
+            </video>
 
             {/* 2. Dark contrast overlay */}
             <div className="absolute inset-0 bg-black/50 pointer-events-none" />
