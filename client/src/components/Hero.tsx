@@ -5,13 +5,13 @@ export default function Hero(){
         <section className="relative h-[55vh] w-full overflow-hidden flex items-center justify-center">
             <video
                 controls
-                preload="metadata"
+                preload="auto"
                 autoPlay
                 loop
                 muted
                 playsInline
                 className="absolute inset-0 h-full w-full object-cover">
-                <source src="https://pub-1e569b6d799147f59ef0a615ac232401.r2.dev/zoro-bg.mp4" type="video/mp4" />
+                <source src="https://pub-1e569b6d799147f59ef0a615ac232401.r2.dev/zoro-bg2.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
             </video>
 
