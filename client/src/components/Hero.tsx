@@ -1,13 +1,31 @@
+import { useRef } from "react";
+
 export default function Hero() {
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    const handleTimeUpdate = () => {
+        const video = videoRef.current;
+        if (!video) return;
+
+        // Loop seamlessly ~0.15s before reaching the hard file end
+        if (video.duration && video.currentTime > video.duration - 0.15) {
+            video.currentTime = 0;
+            video.play();
+        }
+    };
+
     return (
         <section className="relative h-[55vh] w-full overflow-hidden flex items-center justify-center">
-            {/* 1. Background Video pinned behind content */}
+            {/* 1. Background Video */}
             <video
+                ref={videoRef}
                 preload="auto"
                 autoPlay
                 loop
                 muted
                 playsInline
+                disablePictureInPicture
+                onTimeUpdate={handleTimeUpdate}
                 className="absolute inset-0 h-full w-full object-cover blur-md scale-110 pointer-events-none"
             >
                 <source src="/zoro-bg2.mp4" type="video/mp4" />
