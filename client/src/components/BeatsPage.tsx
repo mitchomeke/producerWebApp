@@ -39,6 +39,12 @@ export default function BeatsPage (){
 
     return (
         <main className="relative min-h-screen bg-black text-white px-4 py-8 sm:px-6 sm:py-16">
+
+            <img
+                src="/bandw.jpg"
+                alt="Background"
+                className="absolute inset-0 h-full w-full object-cover blur-sm scale-110 pointer-events-none"
+            />
             {/* 1. Background Video Layer */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
 
