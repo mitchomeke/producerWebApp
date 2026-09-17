@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="100%" height="100%">
+  <!-- White Background -->
+  <rect width="1024" height="1024" fill="#ffffff"/>
+
+  <!-- Inverted MB Mark (Pure Black) -->
+  <g fill="#000000">
+    <!-- Left M Stem & Inner Peak -->
+    <polygon points="266,311 312,357 312,692 266,664" />
+    <polygon points="312,357 428,530 580,311 580,375 428,590 312,416" />
+    
+    <!-- Dynamic Slice Accent -->
+    <polygon points="377,605 519,498 519,539 416,616" />
+
+    <!-- B Stem & Letterform Body -->
+    <path d="M519 396 H665 C725 396 752 428 752 472 C752 505 735 528 700 538 C750 550 782 585 782 638 C782 690 735 723 665 723 H519 Z M569 444 V528 H655 C685 528 702 512 702 486 C702 460 685 444 655 444 Z M569 572 V675 H662 C695 675 732 660 732 624 C732 588 695 572 662 572 Z" />
+  </g>
+</svg>
