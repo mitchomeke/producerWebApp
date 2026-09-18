@@ -912,7 +912,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-3e2f7719069249b486b0425c61266e82.r2.dev`,
     },
     {
-        id: 76,
+        id: 77,
         title: 'alexa',
         bpm: 135,
         tier: 2,
@@ -924,7 +924,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-3e2f7719069249b486b0425c61266e82.r2.dev`,
     },
     {
-        id: 77,
+        id: 78,
         title: 'clingy',
         bpm: 130,
         tier: 1,
@@ -936,7 +936,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 78,
+        id: 79,
         title: 'highs & lows',
         bpm: 120,
         tier: 1,
@@ -948,7 +948,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 79,
+        id: 80,
         title: 'yippy shit',
         bpm: 120,
         tier: 1,
@@ -960,7 +960,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 80,
+        id: 81,
         title: 'road rage',
         bpm: 130,
         tier: 1,
@@ -972,7 +972,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 81,
+        id: 82,
         title: 'first ever sample me thinks',
         bpm: 129,
         tier: 1,
@@ -984,7 +984,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 82,
+        id: 83,
         title: 'jim morrison',
         bpm: 150,
         tier: 1,
@@ -996,7 +996,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 83,
+        id: 84,
         title: 'shut up! guitars playing',
         bpm: 150,
         tier: 1,
@@ -1008,7 +1008,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 84,
+        id: 85,
         title: 'harmonic whistle',
         bpm: 150,
         tier: 1,
@@ -1020,7 +1020,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 85,
+        id: 86,
         title: 'shing-a-ling',
         bpm: 150,
         tier: 1,
@@ -1032,7 +1032,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 86,
+        id: 87,
         title: 'rick & morty',
         bpm: 80,
         tier: 1,
@@ -1044,7 +1044,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 87,
+        id: 88,
         title: 'flexi-yell',
         bpm: 150,
         tier: 1,
@@ -1056,7 +1056,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 88,
+        id: 89,
         title: 'retribution',
         bpm: 150,
         tier: 1,
@@ -1068,7 +1068,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 89,
+        id: 90,
         title: 'dance bitch! dance',
         bpm: 80,
         tier: 1,
@@ -1080,7 +1080,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 90,
+        id: 91,
         title: 'a pop attempt!',
         bpm: 110,
         tier: 1,
@@ -1092,7 +1092,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 91,
+        id: 92,
         title: 'piano from heaven',
         bpm: 140,
         tier: 1,
@@ -1104,7 +1104,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 92,
+        id: 93,
         title: 'kiss the devil',
         bpm: 81,
         tier: 1,
@@ -1116,7 +1116,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 93,
+        id: 94,
         title: 'jumbotron',
         bpm: 140,
         tier: 1,
@@ -1128,7 +1128,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 94,
+        id: 95,
         title: 'new design',
         bpm: 144,
         tier: 1,
@@ -1140,7 +1140,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 95,
+        id: 96,
         title: 'in my dreams',
         bpm: 135,
         tier: 1,
@@ -1152,7 +1152,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 96,
+        id: 97,
         title: 'a god in human clothing',
         bpm: 150,
         tier: 1,
@@ -1164,7 +1164,7 @@ export const BEATS_CATALOG = [
         audioUrl: `https://pub-2db0994ef81141adb4e2653db9f27148.r2.dev`,
     },
     {
-        id: 97,
+        id: 98,
         title: 'just the 2 of us from hell',
         bpm: 140,
         tier: 1,
