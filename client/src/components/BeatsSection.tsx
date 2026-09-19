@@ -16,7 +16,7 @@ export default function BeatsSection(){
                     Beats Selection
                 </h2>
                 <p className="mt-2 text-sm text-zinc-400">
-                    Browse songs categorized by tier
+                    Browse beats categorized by tier
                 </p>
             </div>
             <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-6">
