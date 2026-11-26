@@ -2,7 +2,7 @@
 import {useState} from "react";
 
 export default function ContactInfo(){
-    const email = "mitchellomeke@yahoo.com";
+    const email = "prodmitch.31@gmail.com";
     const [copied,setCopied] = useState(false);
     const handleCopy = async () => {
         await navigator.clipboard.writeText(email);

@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@aws-sdk/s3-request-presigner": "^3.1131.0",
+    "resend": "^6.28.0",
+    "stripe": "^22.6.1"
+  }
+}

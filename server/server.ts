@@ -489,7 +489,6 @@ app.post('/create-checkout-session/beats', async (req, res) => {
                 beatId: String(beat.id),
             },
             success_url: `${process.env.CLIENT_URL}/beats/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${process.env.CLIENT_URL}/beats/${beat.tier}-star`,
         });
         res.json({url: session.url});
     } catch (error: any){
@@ -525,7 +524,6 @@ app.post('/create-checkout-session/songs', async (req, res) => {
                 songId: String(song.id),
             },
             success_url: `${process.env.CLIENT_URL}/songs/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${process.env.CLIENT_URL}/songs/${song.tier}-tier`,
         });
         res.json({url: session.url});
     } catch (error: any) {
